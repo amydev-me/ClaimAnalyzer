@@ -1,0 +1,163 @@
+name: 'Deploy Claim Analyzer'
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  AWS_REGION: 'ap-southeast-1'
+  TF_VERSION: '1.5.0'
+
+jobs:
+  # Build Lambda functions
+  build:
+    name: 'Build Lambda Functions'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Build Lambda artifacts
+      run: |
+        mkdir -p artifacts
+        
+        # Build upload handler
+        echo "Building upload_handler..."
+        cd lambda
+        zip -r ../artifacts/upload_handler.zip upload_handler.py
+        
+        # Build submission analyzer
+        echo "Building submission_analyzer..."
+        zip -r ../artifacts/submission_analyzer.zip submission_analyzer.py
+        
+        # List artifacts
+        ls -la ../artifacts/
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: lambda-artifacts
+        path: artifacts/
+        retention-days: 1
+
+  # Terraform plan (for PRs and all pushes)
+  plan:
+    name: 'Terraform Plan'
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: lambda-artifacts
+        path: artifacts/
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ env.TF_VERSION }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Terraform Format Check
+      run: terraform fmt -check
+      working-directory: terraform
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: terraform
+
+    - name: Terraform Validate
+      run: terraform validate
+      working-directory: terraform
+
+    - name: Terraform Plan
+      run: |
+        terraform plan \
+          -var="upload_handler_zip_path=../artifacts/upload_handler.zip" \
+          -var="submission_analyzer_zip_path=../artifacts/submission_analyzer.zip" \
+          -var="openai_api_key=${{ secrets.OPENAI_API_KEY }}" \
+          -var="environment=dev"
+      working-directory: terraform
+
+  # Deploy (only on main branch)
+  deploy:
+    name: 'Deploy to AWS'
+    runs-on: ubuntu-latest
+    needs: [build, plan]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: lambda-artifacts
+        path: artifacts/
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ env.TF_VERSION }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: terraform
+
+    - name: Terraform Apply
+      run: |
+        terraform apply -auto-approve \
+          -var="upload_handler_zip_path=../artifacts/upload_handler.zip" \
+          -var="submission_analyzer_zip_path=../artifacts/submission_analyzer.zip" \
+          -var="openai_api_key=${{ secrets.OPENAI_API_KEY }}" \
+          -var="environment=prod"
+      working-directory: terraform
+
+    - name: Output API Gateway URL
+      run: terraform output api_gateway_url
+      working-directory: terraform
+
+  # Test deployment
+  test:
+    name: 'Test Deployment'
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Test API endpoints
+      run: |
+        # Get API Gateway URL from terraform output
+        # Add basic smoke tests here
+        echo "Running basic API tests..."
+        # curl tests would go here
