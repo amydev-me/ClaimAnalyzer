@@ -18,7 +18,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4 # Updated to v4
+      uses: actions/checkout@v4 # <<< CORRECTED
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -31,20 +31,20 @@ jobs:
         
         # Build upload handler
         echo "Building upload_handler..."
-        # Corrected path to lambda directory
+        # Assuming lambda directory is at the root for this script
         cd lambda 
         zip -r ../artifacts/upload_handler.zip upload_handler.py
         
         # Build submission analyzer
         echo "Building submission_analyzer..."
-        # Corrected path to lambda directory
         zip -r ../artifacts/submission_analyzer.zip submission_analyzer.py
         
         # List artifacts
         ls -la ../artifacts/
+      shell: /usr/bin/bash -e {0}
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4 # Updated to v4
+      uses: actions/upload-artifact@v4 # <<< CORRECTED
       with:
         name: lambda-artifacts
         path: artifacts/
@@ -58,10 +58,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # <<< CORRECTED
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4 # <<< CORRECTED
       with:
         name: lambda-artifacts
         path: artifacts/
@@ -109,10 +109,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # <<< CORRECTED
 
     - name: Download artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4 # <<< CORRECTED
       with:
         name: lambda-artifacts
         path: artifacts/
@@ -155,7 +155,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # <<< CORRECTED
 
     - name: Test API endpoints
       run: |
