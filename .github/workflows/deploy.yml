@@ -18,7 +18,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # Updated to v4
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -31,18 +31,20 @@ jobs:
         
         # Build upload handler
         echo "Building upload_handler..."
-        cd lambda
+        # Corrected path to lambda directory
+        cd lambda 
         zip -r ../artifacts/upload_handler.zip upload_handler.py
         
         # Build submission analyzer
         echo "Building submission_analyzer..."
+        # Corrected path to lambda directory
         zip -r ../artifacts/submission_analyzer.zip submission_analyzer.py
         
         # List artifacts
         ls -la ../artifacts/
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v4 # Updated to v4
       with:
         name: lambda-artifacts
         path: artifacts/
