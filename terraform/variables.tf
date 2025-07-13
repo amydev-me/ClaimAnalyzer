@@ -39,3 +39,10 @@ variable "upload_handler_zip_path" {
   type        = string
   default     = "../artifacts/upload_handler.zip"
 }
+
+variable "submission_analyzer_zip_path" {
+  description = "Path to submission analyzer zip file"
+  type        = string
+  # Default value can be set if it's always the same, or left empty if it's always provided via CI/CD
+  default     = "../artifacts/submission_analyzer.zip" 
+}
