@@ -23,7 +23,7 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
 }
 
 resource "aws_iam_policy" "lambda_s3_access" {
-  name        = "${var.project_name}-lambda-s3-access-policy"
+   
   description = "IAM policy for Lambda to access S3 bucket"
 
   policy = jsonencode({
