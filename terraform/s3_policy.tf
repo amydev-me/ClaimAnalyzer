@@ -5,8 +5,8 @@ resource "aws_s3_bucket_policy" "allow_lambda_access" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid       = "AllowLambdaS3Access",
-        Effect    = "Allow",
+        Sid    = "AllowLambdaS3Access",
+        Effect = "Allow",
         Principal = {
           AWS = aws_iam_role.lambda_exec.arn
         },
@@ -20,8 +20,8 @@ resource "aws_s3_bucket_policy" "allow_lambda_access" {
         ]
       },
       {
-        Sid       = "AllowLambdaListBucket",
-        Effect    = "Allow",
+        Sid    = "AllowLambdaListBucket",
+        Effect = "Allow",
         Principal = {
           AWS = aws_iam_role.lambda_exec.arn
         },

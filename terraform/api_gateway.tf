@@ -1,13 +1,13 @@
 resource "aws_apigatewayv2_api" "http_api" {
   name          = "${var.project_name}-api"
   protocol_type = "HTTP"
-  
+
   cors_configuration {
-    allow_origins     = var.allowed_origins
-    allow_methods     = ["GET", "PUT", "POST", "OPTIONS"]
-    allow_headers     = ["Content-Type", "Authorization", "X-Amz-Date", "X-Api-Key", "X-Amz-Security-Token"]
-    expose_headers    = ["x-amz-request-id", "x-amz-id-2", "x-amz-server-side-encryption"]
-    max_age           = 3600
+    allow_origins  = var.allowed_origins
+    allow_methods  = ["GET", "PUT", "POST", "OPTIONS"]
+    allow_headers  = ["Content-Type", "Authorization", "X-Amz-Date", "X-Api-Key", "X-Amz-Security-Token"]
+    expose_headers = ["x-amz-request-id", "x-amz-id-2", "x-amz-server-side-encryption"]
+    max_age        = 3600
   }
 
   tags = {

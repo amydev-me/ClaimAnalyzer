@@ -6,7 +6,7 @@ resource "random_string" "bucket_suffix" {
 }
 
 resource "aws_s3_bucket" "app_bucket" {
-  bucket = var.s3_bucket_name != "" ? var.s3_bucket_name : "${var.project_name}-${var.environment}-${random_string.bucket_suffix.result}"
+  bucket        = var.s3_bucket_name != "" ? var.s3_bucket_name : "${var.project_name}-${var.environment}-${random_string.bucket_suffix.result}"
   force_destroy = true
 
   tags = {
@@ -24,11 +24,11 @@ resource "aws_s3_bucket_cors_configuration" "app_bucket_cors" {
       "http://localhost:3000",
       "https://localhost:3000",
       "http://localhost:3001",
-      "*"  # For development - remove in production
+      "*" # For development - remove in production
     ]
-    expose_headers  = [
+    expose_headers = [
       "x-amz-server-side-encryption",
-      "x-amz-request-id", 
+      "x-amz-request-id",
       "x-amz-id-2",
       "ETag"
     ]

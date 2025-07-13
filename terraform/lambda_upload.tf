@@ -1,10 +1,10 @@
 resource "aws_lambda_function" "upload_handler" {
-  function_name    = "${var.project_name}-upload-handler"
-  handler          = "upload_handler.lambda_handler"
-  runtime          = "python3.12"
-  role            = aws_iam_role.lambda_exec.arn
+  function_name = "${var.project_name}-upload-handler"
+  handler       = "upload_handler.lambda_handler"
+  runtime       = "python3.12"
+  role          = aws_iam_role.lambda_exec.arn
 
-  filename        = var.upload_handler_zip_path
+  filename         = var.upload_handler_zip_path
   source_code_hash = filebase64sha256(var.upload_handler_zip_path)
 
 

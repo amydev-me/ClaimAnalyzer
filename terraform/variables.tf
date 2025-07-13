@@ -31,8 +31,8 @@ variable "s3_bucket_name" {
 variable "allowed_origins" {
   description = "Allowed origins for CORS"
   type        = list(string)
-  default     = ["*"]  # Change to your domain in production
-} 
+  default     = ["*"] # Change to your domain in production
+}
 
 variable "upload_handler_zip_path" {
   description = "Path to upload handler zip file"
