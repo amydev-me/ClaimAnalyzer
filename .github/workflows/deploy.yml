@@ -18,7 +18,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4 # <<< CORRECTED
+      uses: actions/checkout@v4 
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -31,20 +31,28 @@ jobs:
         
         # Build upload handler
         echo "Building upload_handler..."
-        # Assuming lambda directory is at the root for this script
-        cd lambda 
-        zip -r ../artifacts/upload_handler.zip upload_handler.py
+        # CORRECTED: cd into src/lambda/upload_handler
+        cd src/lambda/upload_handler 
+        # Install dependencies for upload_handler (if requirements.txt exists)
+        if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; fi
+        # Zip the contents of the current directory (upload_handler/)
+        zip -r ../../../../artifacts/upload_handler.zip .
         
         # Build submission analyzer
         echo "Building submission_analyzer..."
-        zip -r ../artifacts/submission_analyzer.zip submission_analyzer.py
+        # CORRECTED: cd into src/lambda/submission_analyzer
+        cd ../submission_analyzer 
+        # Install dependencies for submission_analyzer (if requirements.txt exists)
+        if [ -f requirements.txt ]; then pip install -r requirements.txt -t .; fi
+        # Zip the contents of the current directory (submission_analyzer/)
+        zip -r ../../../../artifacts/submission_analyzer.zip .
         
         # List artifacts
         ls -la ../artifacts/
       shell: /usr/bin/bash -e {0}
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v4 # <<< CORRECTED
+      uses: actions/upload-artifact@v4
       with:
         name: lambda-artifacts
         path: artifacts/
