@@ -1,6 +1,6 @@
 # Claim Analyzer Backend Infrastructure
 
-This project demonstrates the setup of a backend infrastructure for a document analysis system. The goal was to build a functional proof-of-concept that showcases an understanding of core AWS serverless patterns, Infrastructure as Code (IaC) with Terraform, and basic CI/CD principles, even with limited prior experience in these specific technologies. The emphasis was on learning, adopting best practices, and creating a clear, documented, and deployable solution.
+This project demonstrates the setup of a backend infrastructure for a claim analysis. The goal was to build a functional proof-of-concept that showcases an understanding of core AWS serverless patterns, Infrastructure as Code (IaC) with Terraform, and basic CI/CD principles, even with limited prior experience in these specific technologies. The emphasis was on learning, adopting best practices, and creating a clear, documented, and deployable solution.
 
 **Demo Link:**  
 [Live Frontend Demo](http://my-react-app-cicd-alb-2013842589.ap-southeast-1.elb.amazonaws.com/)
