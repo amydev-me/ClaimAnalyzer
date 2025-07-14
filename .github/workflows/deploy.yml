@@ -164,11 +164,9 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4 # <<< CORRECTED
+      uses: actions/checkout@v4
 
     - name: Test API endpoints
       run: |
         # Get API Gateway URL from terraform output
         # Add basic smoke tests here
-        echo "Running basic API tests..."
-        # curl tests would go here

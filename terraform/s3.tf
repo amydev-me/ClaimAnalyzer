@@ -1,3 +1,5 @@
+# s3.tf
+
 # Generate random suffix for unique bucket name
 resource "random_string" "bucket_suffix" {
   length  = 8
@@ -21,9 +23,6 @@ resource "aws_s3_bucket_cors_configuration" "app_bucket_cors" {
     allowed_headers = ["*"]
     allowed_methods = ["PUT", "POST", "GET", "HEAD", "DELETE"]
     allowed_origins = [
-      "http://localhost:3000",
-      "https://localhost:3000",
-      "http://localhost:3001",
       "*" # For development - remove in production
     ]
     expose_headers = [

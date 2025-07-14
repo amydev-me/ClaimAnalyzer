@@ -1,3 +1,4 @@
+# s3_policy.tf
 resource "aws_s3_bucket_policy" "allow_lambda_access" {
   bucket = aws_s3_bucket.app_bucket.id
 

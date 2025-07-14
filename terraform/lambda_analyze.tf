@@ -1,3 +1,5 @@
+# lambda_analyze.tf
+
 resource "aws_lambda_function" "submission_analyzer" {
   function_name = "${var.project_name}-submission-analyzer"
   handler       = "submission_analyzer.lambda_handler"

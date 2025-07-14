@@ -40,7 +40,7 @@ build_lambda() {
 build_lambda "upload_handler" "lambda"
 build_lambda "submission_analyzer" "lambda"
 
-echo "📋 Artifacts created:"
+echo "Artifacts created:"
 ls -la artifacts/
 
-echo "🎉 Build completed!"
+echo "Build completed!"

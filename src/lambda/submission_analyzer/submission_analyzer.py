@@ -143,18 +143,18 @@ def analyze_with_openai_http(image_url, description):
         
         # ✅ Enhanced prompt for better analysis
         prompt = f"""
-        Analyze this vehicle damage image and provide a detailed assessment:
-        
-        Description provided: {description}
-        
-        Please provide:
-        1. Damage assessment (severity: minor/moderate/severe)
-        2. Estimated repair cost range
-        3. Parts that need repair/replacement
-        4. Any safety concerns
-        5. Recommended next steps
-        
-        Format as a clear, professional insurance claim analysis.
+            Analyze this vehicle damage image and provide a JSON response with the following fields:
+
+            {
+            "damage_severity": "minor | moderate | severe",
+            "estimated_cost_range": "string (e.g., $500–$1,000)",
+            "affected_parts": ["list of parts"],
+            "safety_concerns": "string",
+            "recommended_action": "string",
+            "summary": "natural language summary of the incident"
+            }
+
+            Description provided: {description}
         """
         
         # Prepare payload

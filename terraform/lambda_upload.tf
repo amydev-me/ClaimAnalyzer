@@ -1,3 +1,5 @@
+# lambda_upload.tf
+
 resource "aws_lambda_function" "upload_handler" {
   function_name = "${var.project_name}-upload-handler"
   handler       = "upload_handler.lambda_handler"
